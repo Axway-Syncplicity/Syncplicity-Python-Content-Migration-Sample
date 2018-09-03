@@ -31,9 +31,9 @@ Once PIP is installed, open a CLI (cmd or shell) and issue the following command
 
 Before using the program, please enter your credentials in `Services\ConfigurationFile`:
 
-* App Key
-* App Secret
-* Application Token
+* `App Key`
+* `App Secret`
+* `Application Token`
 
 In case you do not have the credentials and would like to learn how to obtain these,
 please go to <https://developer.syncplicity.com/overview>.
@@ -79,6 +79,22 @@ Arguments:
   2. Verify Fiddler port the following way: Tools -> Options -> Connections -> Fiddler listens on port: PORT. This port is for both HTTP & HTTPS.
   3. In AuthenticationClass.py & API_Caller.py, uncomment the commented requests lines (and comment out the uncommented ones).
      Replace PORT with the port number & replace PATH\TO\CERTIFICATE with the full path to the root certificate.
+
+### Running on behalf of another user
+
+Running on behalf of another user (using the `--as-user` parameter) requires additional configuration.
+
+The owner of the Application Token must have permissions to execute code on behalf of other users.
+By default, Global Administrators do not have this permission. To grant this permission:
+
+1. There must be at least two Global Administrator users in the company.
+2. One administrator must sign into Syncplicity (<https://my.syncplicity.com>)
+3. Go to the Admin area, User Accounts
+4. Find the other administrator account
+5. Under "Privileges", click "Modify", select "Access content on behalf of managed users through API" and click "Save"
+6. Confirm notification of all administrators about the action
+
+Once this is done, the second administrator account can use the `As User` parameter.
 
 ## Team
 
