@@ -46,7 +46,7 @@ def __calculate_upload_filepath_query_parameter(top_folder_name, file_path_relat
     if just_content:
         syncpoint_path = relative_path_with_normalized_separator
     else:
-        syncpoint_path = top_folder_name + syncplicity_separator + relative_path_with_normalized_separator
+        syncpoint_path = top_folder_name + relative_path_with_normalized_separator
 
     full_file_path = syncpoint_path + syncplicity_separator + filename
 
