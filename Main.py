@@ -98,7 +98,7 @@ def Main():
     for file in file_list:
         filename = file_list[file]['filename']
         filepath = file_list[file]['filepath']
-        file_path_relative_to_syncpoint = str(filepath.split(top_folder_name)[1])
+        file_path_relative_to_syncpoint = str(filepath.split(top_folder_name, 1)[1])
 
         syncpoint_path = __calculate_upload_filepath_query_parameter(top_folder_name, file_path_relative_to_syncpoint, filename, os_path_separator, args.just_content)
 
