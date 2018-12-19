@@ -9,6 +9,7 @@ from Services.AuthenticationClass import Authentication
 from Services.FileFolderMetadataClass import FileFolderMetadataClass
 from Services.UploadFileClass import Upload
 import argparse
+import datetime
 
 
 def parse_args():
@@ -101,7 +102,8 @@ def Main():
         file_path_relative_to_syncpoint = str(filepath.split(top_folder_name, 1)[1])
 
         syncpoint_path = __calculate_upload_filepath_query_parameter(top_folder_name, file_path_relative_to_syncpoint, filename, os_path_separator, args.just_content)
-
+        if int(datetime.datetime.now().timestamp()) - Credentials.auth_timestamp > Credentials.auth_time_to_live:
+            Credentials = Authentication()
         UploadFile = Upload(
             Credentials, AsUser=User_ID, filename=filename, full_path=filepath
         ).Upload(Syncpoint_ID, syncpoint_path, storage_endpoint_url)

@@ -2,6 +2,7 @@
 
 
 from Services.API_Caller import CallAPI
+from Services.AuthenticationClass import Authentication
 import hashlib
 import os
 import platform
@@ -19,6 +20,8 @@ class Upload:
         self.AsUser = AsUser
         self.filename = filename
         self.max_chunk_size = 5242880
+        self.auth_timestamp = Credentials.auth_timestamp
+        self.auth_time_to_live = Credentials.auth_time_to_live
 
         if platform.system() == 'Windows':
             separator = '\\'
@@ -47,7 +50,7 @@ class Upload:
 
     def Upload(self, Syncpoint_ID, Path, Storage_Endpoint_URL):
         base_url = Storage_Endpoint_URL
-        url = "saveFile.php?filepath=" + Path
+        url = "/v2/mime/files?filepath=" + Path
         creation_date = self.creation_date()
         last_write_time = datetime.datetime.fromtimestamp(os.path.getmtime(self.full_path)).isoformat()
         common_headers = {'As-User': '%s' % self.AsUser, "User-Agent": "API_Application"}
@@ -89,6 +92,11 @@ class Upload:
         f = open(self.full_path, 'rb')
         for chunk in self.read_in_chunks(f):
             is_last_chunk = sent_chunk_count == chunk_count
+
+            if int(datetime.datetime.now().timestamp()) - self.auth_timestamp > self.auth_time_to_live:
+                re_auth = Authentication()
+                self.AccessToken = re_auth.AccessToken
+                self.auth_timestamp = re_auth.auth_timestamp
 
             response = self.__upload_file_chunk(
                 url, base_url, common_headers, chunk, is_last_chunk, content_range_index,
